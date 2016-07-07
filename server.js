@@ -18,6 +18,9 @@ mongoose.connect('mongodb://root:abc123@ds015915.mlab.com:15915/ecommerce', func
 });
 
 //Middleware
+//add how to use static page
+app.use(express.static(__dirname + '/public'));
+
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
