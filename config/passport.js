@@ -1,6 +1,6 @@
 var passport = require('passport');
-var localStrategy = require('passport-local').Strategy();
-
+var localStrategy = require('passport-local').Strategy;
+var User = require('../models/user');
 
 
 passport.serializeUser(function(user, done){
@@ -23,13 +23,13 @@ passport.use('local-login', new localStrategy({
   passwordField: 'password',
   passReqToCallback: true
 }, function(req, email, password, done){
-  User.find({email: email}, function(err, user){
+  User.findOne({email: email}, function(err, user){
     if (err) return done(err);
 
     if(!user) {
       return done(null, false, req.flash('loginMessage', 'No user has been found'));
     }
-
+    console.log(user);
     if(!user.comparePassword(password)){
       return done(null, false, req.flash('loginMessage', 'Opps! Wrong Password Pal'));
     }
