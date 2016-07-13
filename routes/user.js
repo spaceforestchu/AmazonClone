@@ -39,6 +39,7 @@ router.post('/signup', function(req, res){
   user.profile.name = req.body.name;
   user.email = req.body.email;
   user.password = req.body.password;
+  user.profile.picture = user.gravatar();
 
   //findOne is mongoose method to find data stored in server
   User.findOne({email: req.body.email}, function(err, existingUser){
@@ -49,11 +50,20 @@ router.post('/signup', function(req, res){
       user.save(function(err, user){
         if(err) return next(err);
 
-        return res.redirect('/');
+        req.logIn(user, function(err){
+          if (err) return next(err);
+          res.redirect('/profile');
+        });
       }); //user.save ending
     }//else
   });//User.findOne ending
 });//router
 
+
+
+router.get('/logout', function(req, res, next){
+  req.logout();
+  res.redirect('/');
+});
 
 module.exports = router;
